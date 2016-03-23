@@ -8,18 +8,16 @@ namespace Productivity
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
+            
             if (args.Length!=0)
             {
                 //dostup k failu
-                StringBuilder s = new StringBuilder();
-                foreach (var item in args)
-                {
-                    s.Append(item);
-                }
-                string path = s.ToString();
                 
+                string path = args[0];
+
                 if (File.Exists(path))
                 {
                     Dictionary<DateTime, int> Data = new Dictionary<DateTime, int>();
@@ -52,17 +50,64 @@ namespace Productivity
                       
                     }
 
+                    StringBuilder Most = new StringBuilder("Most productive day: ");
+                    StringBuilder Least = new StringBuilder("Least productive day: ");
+                    StringBuilder Average = new StringBuilder("Average packages per day:");
+                    int Max = Data.First(x => x.Value == Data.Values.Max()).Value;
+                    int Min = Data.First(x => x.Value == Data.Values.Min()).Value;
+                    var Aver = Data.Average(x => x.Value);
+                    Average.Append(Aver);
+                    int maxcount = 0, mincount = 0;
+                    foreach (var item in Data)
+                    {//макс знач
+                       // Console.WriteLine("day {0} value {1}",item.Key,item.Value);
+                        if (item.Value==Max)
+                        {
+                            maxcount++;
+                            Most.Append(item.Key.ToString("dd.MM.yyyy "));
+                            Most.Append(item.Value);
+                            if (maxcount>1)
+                            {
+                                Most.Append(",");
+                            }
+                        }
+                        if (item.Value == Min)
+                        {
+                            mincount++;
+                            Least.Append(item.Key.ToString("dd.MM.yyyy "));
+                            Least.Append(item.Value);
+                            if (maxcount > 1)
+                            {
+                                Least.Append(",");
+                            }
+                        }
+
+                    }
+                    Console.WriteLine(Most);
+                    Console.WriteLine(Least);
+                    Console.WriteLine(Average);
+
                 }
                 else
                 {
                     Console.WriteLine("File do not exsists");
                 }
+               
+
+
             }
             else
             {
                 Console.WriteLine("Faild pass");
             }
-            Console.ReadKey();
+            ConsoleKeyInfo cki;
+            Console.WriteLine("Press Enter for exit");
+            do
+            {
+                cki = Console.ReadKey(true);
+            } while (cki.Key != ConsoleKey.Enter);
+            
+           
         }
     }
 }
