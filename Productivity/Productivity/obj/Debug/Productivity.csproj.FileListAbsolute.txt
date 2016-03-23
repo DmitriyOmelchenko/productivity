@@ -1,0 +1,6 @@
+C:\Users\pervolo\Documents\Visual Studio 2015\Projects\Productivity\Productivity\Productivity\bin\Debug\Productivity.exe.config
+C:\Users\pervolo\Documents\Visual Studio 2015\Projects\Productivity\Productivity\Productivity\bin\Debug\Productivity.exe
+C:\Users\pervolo\Documents\Visual Studio 2015\Projects\Productivity\Productivity\Productivity\bin\Debug\Productivity.pdb
+C:\Users\pervolo\Documents\Visual Studio 2015\Projects\Productivity\Productivity\Productivity\obj\Debug\Productivity.csprojResolveAssemblyReference.cache
+C:\Users\pervolo\Documents\Visual Studio 2015\Projects\Productivity\Productivity\Productivity\obj\Debug\Productivity.exe
+C:\Users\pervolo\Documents\Visual Studio 2015\Projects\Productivity\Productivity\Productivity\obj\Debug\Productivity.pdb
