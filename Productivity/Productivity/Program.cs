@@ -13,88 +13,44 @@ namespace Productivity
         {
             
             if (args.Length!=0)
-            {
-                //dostup k failu
-                
-                string path = args[0];
+            { 
+                //file path 
+                string filePath = args[0];
 
-                if (File.Exists(path))
+                if (File.Exists(filePath))
                 {
-                    Dictionary<DateTime, int> Data = new Dictionary<DateTime, int>();
-                    StreamReader sr = new StreamReader(path);
-                    string line; 
-                    //formiruem danue dlya sravn
-                    while ((line=sr.ReadLine())!=null)
+                    Dictionary<string, int> resultDictionary = new Dictionary<string, int>();
+                    //get data from file
+                    foreach (var line in File.ReadAllLines(filePath))
                     {
-                        char[] separator = { ' ', '\n' };
-                        string[] danuestroki = line.Split(separator);
-                        int summ = 0;
-                        DateTime currdate;
-                        //summa pokazatelei
-                        for (int i = 1; i < danuestroki.Length; i++)
+                        var lineSplitted = line.Split(new[] { ' ', '\n', '\t' },StringSplitOptions.RemoveEmptyEntries);
+                        
+                        if (lineSplitted.Length<2)
                         {
-                            int curr;
-                            //  Console.Write("s[{0}]={1}", i, danuestroki[i]);
-                            if (int.TryParse(danuestroki[i],out curr ))
-                            {
-                                summ+= curr;
-                            }   
-                          
-
+                            continue;
                         }
-                        //dobavl
-                        if (DateTime.TryParse(danuestroki[0],out currdate))
-                        {
-                            Data.Add(currdate,summ);
-                        }
-                      
+                        var lineDay = lineSplitted.First();
+                        //prodactivity per day
+                        
+                        var lineSum = lineSplitted.Skip(1).Select(int.Parse).Sum();
+                        resultDictionary.Add(lineDay, lineSum);
                     }
 
-                    StringBuilder Most = new StringBuilder("Most productive day: ");
-                    StringBuilder Least = new StringBuilder("Least productive day: ");
-                    StringBuilder Average = new StringBuilder("Average packages per day:");
-                    int Max = Data.First(x => x.Value == Data.Values.Max()).Value;
-                    int Min = Data.First(x => x.Value == Data.Values.Min()).Value;
-                    var Aver = Data.Average(x => x.Value);
-                    Average.Append(Aver);
-                    int maxcount = 0, mincount = 0;
-                    foreach (var item in Data)
-                    {//макс знач
-                       // Console.WriteLine("day {0} value {1}",item.Key,item.Value);
-                        if (item.Value==Max)
-                        {
-                            maxcount++;
-                            Most.Append(item.Key.ToString("dd.MM.yyyy "));
-                            Most.Append(item.Value);
-                            if (maxcount>1)
-                            {
-                                Most.Append(",");
-                            }
-                        }
-                        if (item.Value == Min)
-                        {
-                            mincount++;
-                            Least.Append(item.Key.ToString("dd.MM.yyyy "));
-                            Least.Append(item.Value);
-                            if (maxcount > 1)
-                            {
-                                Least.Append(",");
-                            }
-                        }
+                    var maxProductiveDays =  resultDictionary.Where(d => d.Value == resultDictionary.Values.Max()).ToDictionary(d => d.Key, d => d.Value);
 
-                    }
-                    Console.WriteLine(Most);
-                    Console.WriteLine(Least);
-                    Console.WriteLine(Average);
+                    var leastProductiveDays = resultDictionary.Where(d=>d.Value==resultDictionary.Values.Min()).ToDictionary(d=>d.Key,d=>d.Value);
 
+                    var averageProductivity = resultDictionary.Values.Average();
+
+                    Console.WriteLine("Max productive day:" + " ({0}) {1}", maxProductiveDays.Values.First(), string.Join(",", maxProductiveDays.Select(d => d.Key)));
+                    Console.WriteLine("Least productive day: " + " ({0}) {1}", leastProductiveDays.Values.First(), string.Join(",", leastProductiveDays.Select(d => d.Key)));
+                    Console.WriteLine("Averag productivity: {0:0.000}", averageProductivity);
                 }
                 else
                 {
                     Console.WriteLine("File do not exsists");
                 }
                
-
-
             }
             else
             {
